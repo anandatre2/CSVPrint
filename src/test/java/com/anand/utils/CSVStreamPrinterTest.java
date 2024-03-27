@@ -95,10 +95,10 @@ public class CSVStreamPrinterTest {
                 "{YEAR=\"\", Size=\"\", Model=\"\", Make=\"\"}\r\n" +
                 "{YEAR=, Size=\"  \", Model=\"      \", Make=\"       \"}\r\n" +
                 "{YEAR=2020, Size=\"  SUBCOMPACT\", Model=\"   i-MiEV   \", Make='    MITSUBISHI   ''}\r\n" +
-                "{YEAR=2020, Size=\"  SUBCOMPACT\", Model=\"   i-MiEV   \", Make=\"    MITSUBISHI   \"}\r\n" +
-                "{YEAR=2020, Size=\"  SUBCOMPACT\", Model=\"   i-MiEV   \", Make=\"    MITSUBISHI   \"}\r\n" +
-                "{YEAR=2020, Size=\"  SUBCOMPACT\", Model=\"   2030   \", Make=\"    MITSUBISHI   \"}\r\n" +
-                "{YEAR=2020, Size=\"  SUBCOMPACT\", Model=\"   20.5530.33   \", Make=\"    MITSUBISHI   \"}\r\n" +
+                "{YEAR=2020, Size=\"  SUBCOM,PACT\", Model=\"   i-MiEV   \", Make=\"    MITSU,BISHI   \"}\r\n" +
+                "{YEAR=2020, Size=\"  SUBCOM,PACT\", Model=\"   i-Mi,EV   \", Make=\"    MITSU,BISHI   \"}\r\n" +
+                "{YEAR=2020, Size=\"  SUBCOM,PACT\", Model=\"   20,30   \", Make=\"    MITSU,BISHI   \"}\r\n" +
+                "{YEAR=2020, Size=\"  SUBCOM,PACT\", Model=\"   20.55,30.33   \", Make=\"    MITSU,BISHI   \"}\r\n" +
                 "{YEAR=44.44, Size=\"  SUBCOMPACT\", Model=\"   44.44   \", Make=\"    55.55   \"}\r\n" +
                 "{YEAR=, Size=, Model=, Make=}\r\n" +
                 "{YEAR=2020, Size='  SUBCOMPACT', Model=\"   i-MiEV   \", Make='   MITSUBISHI   '}\r\n"+

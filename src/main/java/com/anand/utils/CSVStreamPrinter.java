@@ -97,7 +97,7 @@ public class CSVStreamPrinter {
             //this is to handle the comma within the string
             Pattern pattern = Pattern.compile("\"([^\"]*)\"");
             Matcher matcher = pattern.matcher(line);
-            String result = matcher.replaceAll(matchResult -> matchResult.group().replace(",", ""));
+            String result = matcher.replaceAll(matchResult -> matchResult.group().replace(",", "#comma94befe2f#"));
 
             Stream<String> fieldStream = Arrays.stream(result.split(delimiter));
             List<String> fieldValues = fieldStream.collect(Collectors.toList());
@@ -107,7 +107,7 @@ public class CSVStreamPrinter {
                             Function.identity(),
                             fieldName -> {
                                 String value = fieldValues.isEmpty() ? "" : fieldValues.remove(0).trim();
-                                return parseValue(value); // Parse the value
+                                return parseValue(value.replace("#comma94befe2f#", ",")); // Parse the value
                             }
                     ));
         }
