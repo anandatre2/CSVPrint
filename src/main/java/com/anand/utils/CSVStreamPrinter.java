@@ -77,9 +77,13 @@ public class CSVStreamPrinter {
     // static method to parse a CSV line into a map of field names and values
     public static Map<String, Object> parseCSVLine(String line, String delimiter, List<String> fieldNames)  {
         try {
-            //this is to handle the comma within the string
-            Pattern pattern = Pattern.compile("\"([^\"]*)\"");
+            //the following code is responsible for handling commma inside both the double quotes and single quotes.
+
+            //define the pattern to capture both double quotes and single quotes.
+            Pattern pattern = Pattern.compile("[\"']([^\"']*)[\"']");
             Matcher matcher = pattern.matcher(line);
+            //the following line uses the string #comma94befe2f# to replace comma within the quotes since our delimiter is also comma
+            //the string #comma94befe2f# will be replaced by comma after parsing the value at the end
             String result = matcher.replaceAll(matchResult -> matchResult.group().replace(",", "#comma94befe2f#"));
 
             Stream<String> fieldStream = Arrays.stream(result.split(delimiter));

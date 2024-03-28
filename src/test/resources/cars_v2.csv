@@ -9,7 +9,7 @@ YEAR,Make,Model,Size
 ,,,,
 "","","",""
 ,"       ","      ","  "
-2020,'    MITSUBISHI   '',"   i-MiEV   ","  SUBCOMPACT"
+2020,'    MITSUBISHI   ',"   i-MiEV   ","  SUBCOMPACT"
 2020,"    MITSU,BISHI   ","   i-MiEV   ","  SUBCOM,PACT"
 2020,"    MITSU,BISHI   ","   i-Mi,EV   ","  SUBCOM,PACT"
 2020,"    MITSU,BISHI   ","   20,30   ","  SUBCOM,PACT"
@@ -18,3 +18,4 @@ YEAR,Make,Model,Size
 
 2020, '   MITSUBISHI   ',"   i-MiEV   ",'  SUBCOMPACT'
 2020,    MITSUBISHI   ,   i-MiEV   ,  SUBCOMPACT
+2020, '   MITSU,BISHI   ',"   i-MiEV   ",'  SUB,COMPACT'
