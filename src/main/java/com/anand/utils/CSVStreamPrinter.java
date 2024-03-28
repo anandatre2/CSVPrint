@@ -6,6 +6,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
@@ -34,7 +35,7 @@ public class CSVStreamPrinter {
 
     public void printCsv() {
         if (filePath.isEmpty()) {
-            System.out.println("The file path you have supplied is empty.Please supply a correct file path");
+            System.err.println("The file path you have supplied is empty.Please supply a correct file path");
             return;
         }
 
@@ -43,16 +44,15 @@ public class CSVStreamPrinter {
         try (BufferedReader br= Files.newBufferedReader(path)) {
             //TODO - use logger to check the time-spent
             //long timeA = System.currentTimeMillis();
-            Stream<Map<String, Object>> finalMap = executeReader(delimiter, br);
-            finalMap.forEach(System.out::println);
+            executeReader(delimiter, br)
+                    .forEach(System.out::println);
             //long timeB = System.currentTimeMillis();
             //System.out.println("Elapsed time: " + (timeB - timeA));
         }
         catch (IOException e) {
-            System.out.println("It seems that the file does not exist at the specified file path. Please check the file and/or the file path");
+            System.err.println("It seems that the file does not exist at the specified file path. Please check the file and/or the file path");
         }
         catch(Exception e) {
-            //TODO - this exception needs to be reproduced
             System.out.println("An unknown error has occurred. Please contact your System Administrator");
             e.printStackTrace();
         }
@@ -60,39 +60,22 @@ public class CSVStreamPrinter {
 
 
     //static method to carry out the necessary execution
-    public static Stream<Map<String, Object>> executeReader(String delimiter, BufferedReader br) throws IOException, Exception {
+    public static Stream<Map<String, Object>> executeReader(String delimiter, BufferedReader br) throws IOException {
         String headerLine = br.readLine();
         if (headerLine == null) {
-            //TODO - do we want to handle it an exception or returning empty stream is ok?
-            //TODO - add JUnit test
-            return Stream.empty();
+            return Stream.empty(); // Return an empty stream if header line is null
         }
 
         List<String> fieldNames = Arrays.asList(headerLine.split(delimiter));
 
         return br.lines()
-                .parallel() // Use parallel stream to get bonus points and for potential performance boost
-                .map(line -> {
-                    try {
-                        return parseCSVLine(line, delimiter, fieldNames);
-                    } catch (Exception e) {
-                        //TODO - this exception needs to be reproduced
-                        throw new RuntimeException(e);
-                    }
-                })
-                .onClose(() -> {
-                    try {
-                        br.close(); // Close the BufferedReader when the stream is closed
-                    } catch (IOException e) {
-                        //TODO - this exception needs to be reproduced
-                        throw new RuntimeException(e);
-                    }
-                });
-
+                .parallel()
+                .map(line -> parseCSVLine(line, delimiter, fieldNames))
+                .onClose(() -> closeBufferedReader(br));
     }
 
     // static method to parse a CSV line into a map of field names and values
-    public static Map<String, Object> parseCSVLine(String line, String delimiter, List<String> fieldNames) throws Exception {
+    public static Map<String, Object> parseCSVLine(String line, String delimiter, List<String> fieldNames)  {
         try {
             //this is to handle the comma within the string
             Pattern pattern = Pattern.compile("\"([^\"]*)\"");
@@ -111,33 +94,40 @@ public class CSVStreamPrinter {
                             }
                     ));
         }
-        catch (Exception e) {
-            //TODO - this exception needs to be reproduced
-            throw new RuntimeException("Failed to parse CSV line: " + line, e);
+        catch (IndexOutOfBoundsException e) {
+            System.err.println("Error parsing CSV line: " + e.getMessage());
+            //TODO - use logger to spit out the error
+            e.printStackTrace();
         }
+        // Return a default value if an exception occurs
+        return Collections.emptyMap();
     }
 
     //static method to parse a String value
     public static Object parseValue(String value) {
-        try {
-            if (value.isEmpty()) {
-                //TODO - assuming returning an empty string is ok and meets the acceptance criteria
-                return "";
-            }
-            try {
-                return Integer.parseInt(value);
-            } catch (NumberFormatException e1) {
-                try {
-                    return Double.parseDouble(value);
-                } catch (NumberFormatException e2) {
-                    return value;
-                }
-            }
+        if (value == null || value.isEmpty()) {
+            //TODO - assuming returning an empty string is ok and meets the acceptance criteria
+            return "";
         }
-        catch (Exception e) {
-            //TODO - this exception needs to be reproduced
-            throw new RuntimeException("Failed to parse value: " + value, e);
+        try {
+            return Integer.parseInt(value);
+        } catch (NumberFormatException e1) {
+            try {
+                return Double.parseDouble(value);
+            } catch (NumberFormatException e2) {
+                return value;
+            }
         }
     }
+
+    private static void closeBufferedReader(BufferedReader br) {
+        try {
+            br.close();
+        } catch (IOException e) {
+            System.err.println("Error closing BufferedReader: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
 }
 

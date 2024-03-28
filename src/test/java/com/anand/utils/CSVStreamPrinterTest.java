@@ -27,7 +27,7 @@ public class CSVStreamPrinterTest {
     @Test
     public void testPrintCsvExceptionHandling() {
         // Redirect stdout to capture printed output
-        System.setOut(new PrintStream(outContent));
+        System.setErr(new PrintStream(outContent));
         csvStreamPrinter = new CSVStreamPrinter(""); // Empty file path to simulate exception
         csvStreamPrinter.printCsv();
         // Verify that an error message is printed
@@ -37,7 +37,7 @@ public class CSVStreamPrinterTest {
     @Test
     public void testPrintCsvIOExceptionHandling() {
         // Redirect stdout to capture printed output
-        System.setOut(new PrintStream(outContent));
+        System.setErr(new PrintStream(outContent));
         csvStreamPrinter = new CSVStreamPrinter("nonexistent.csv"); // Non-existent file path to simulate IOException
         csvStreamPrinter.printCsv();
         // Verify that an error message is printed
@@ -48,7 +48,7 @@ public class CSVStreamPrinterTest {
     public void testPrintCsvOtherExceptionHandling() {
         // Redirect stdout to capture printed output
         //TODO - understand the format of file to send a better message
-        System.setOut(new PrintStream(outContent));
+        System.setErr(new PrintStream(outContent));
         csvStreamPrinter = new CSVStreamPrinter("invalidcsv.txt"); // Invalid file content to simulate exception
         csvStreamPrinter.printCsv();
         // Verify that an error message is printed
@@ -225,6 +225,21 @@ public class CSVStreamPrinterTest {
             }
         }
     }
+
+    @Test
+    public void testPrintCsvMissingEverything() {
+        Path resourceDirectory = Paths.get("src","test","resources");
+        String absolutePath = resourceDirectory.toFile().getAbsolutePath();
+        String filePath = absolutePath + "\\cars_v4.csv";
+        csvStreamPrinter = new CSVStreamPrinter(filePath);
+
+        System.setOut(new PrintStream(outContent));
+        csvStreamPrinter.printCsv();
+
+        // Verify the printed output
+        assertEquals("", outContent.toString().trim());
+    }
+
 
     public void testPrintCsvHMEQ() {
         long timeA = System.currentTimeMillis();
